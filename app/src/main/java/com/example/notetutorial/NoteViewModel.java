@@ -11,7 +11,7 @@ import java.util.List;
 public class NoteViewModel extends AndroidViewModel {
 
     private NoteRepository repository;
-    private LiveData<List <Note>> allNotes;
+    private LiveData<List<Note>> allNotes;
 
     public NoteViewModel(@NonNull Application application) {
         super(application);
@@ -23,12 +23,14 @@ public class NoteViewModel extends AndroidViewModel {
         repository.insert(note);
     }
 
-    public void update (Note note) {
+    public void update(Note note) {
+
         repository.update(note);
     }
 
     public void delete(Note note) {
-        repository.insert(note);
+
+        repository.delete(note);
     }
 
     public void deleteAllNotes() {
