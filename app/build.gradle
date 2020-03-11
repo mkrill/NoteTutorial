@@ -62,7 +62,7 @@ dependencies {
     // optional - ReactiveStreams support for LiveData
     implementation "androidx.lifecycle:lifecycle-reactivestreams:$lifecycle_version"
 
-    // For lombok
+    // For lombok, needs to be before room
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
@@ -71,6 +71,10 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.1.0'
     annotationProcessor 'androidx.room:room-compiler:2.1.0'
 
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    debugImplementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+
+    // debugging database
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+    // debugImplementation 'com.amitshekhar.android:debug-db-encrypt:1.0.6'
 
 }

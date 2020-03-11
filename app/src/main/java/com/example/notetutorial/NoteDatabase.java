@@ -9,12 +9,13 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Note.class}, version = 1)
+@Database(entities = {Note.class, Category.class}, version = 2)
 public abstract class NoteDatabase extends RoomDatabase {
 
     private static NoteDatabase instance;
 
-    public abstract NoteDao noteDao();
+    public abstract NoteDao getNoteDao();
+    public abstract CategoryDao getCategoryDao();
 
     public static synchronized NoteDatabase getInstance(Context context) {
      if (instance == null) {
@@ -37,16 +38,32 @@ public abstract class NoteDatabase extends RoomDatabase {
     private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private NoteDao noteDao;
+        private CategoryDao categoryDao;
 
         private PopulateDbAsyncTask(NoteDatabase db) {
-            noteDao = db.noteDao();
+
+            noteDao = db.getNoteDao();
+            categoryDao = db.getCategoryDao();
+
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            noteDao.insert(new Note("Title 1", "Description 1", 1));
-            noteDao.insert(new Note("Title 2", "Description 2", 2));
-            noteDao.insert(new Note("Title 3", "Description 3", 3));
+            // Populate initial categories
+            Category catHousehold = new Category("Household");
+            categoryDao.insert(catHousehold);
+            Category catSport = new Category("Sport");
+            categoryDao.insert(catSport);
+            Category catGardening = new Category("Gardening");
+            categoryDao.insert(catGardening);
+            Category catWork = new Category("Work");
+            categoryDao.insert(catWork);
+
+            // Populate initial notes with categories
+            noteDao.insert(new Note("Title 1", "Description 1", 1, catHousehold.getCategoryId()));
+            noteDao.insert(new Note("Title 2", "Description 2", 2, catWork.getCategoryId()));
+            noteDao.insert(new Note("Title 3", "Description 3", 3, catGardening.getCategoryId()));
+
             return null;
         }
     }

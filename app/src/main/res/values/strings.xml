@@ -1,3 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Note Tutorial</string>
+
+    <string-array name="categories_array">
+        <item>Household</item>
+        <item>Work</item>
+        <item>Sport</item>
+        <item>Gardening</item>
+    </string-array>
+
 </resources>

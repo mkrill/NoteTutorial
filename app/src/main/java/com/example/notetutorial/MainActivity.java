@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int ADD_NOTE_REQUEST = 1;
     public static final int EDIT_NOTE_REQUEST = 2;
 
-    private NoteViewModel noteViewModel;
+   private NoteViewModel noteViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +37,16 @@ public class MainActivity extends AppCompatActivity {
         buttonAddNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(MainActivity.this, AddEditNoteActivity.class);
                 startActivityForResult(intent, ADD_NOTE_REQUEST);
             }
         });
+
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        final NoteAdapter adapter = new NoteAdapter();
-        recyclerView.setAdapter(adapter);
+        final NoteAdapter noteAdapter = new NoteAdapter();
+        recyclerView.setAdapter(noteAdapter);
 
 
         noteViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(NoteViewModel.class);
@@ -54,10 +54,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable List<Note> notes) {
                 // update RecyclerView
-                adapter.submitList(notes);
+                noteAdapter.submitList(notes);
             }
         });
 
+        // Allow swipes to left and right
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -67,18 +68,18 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                Note note = adapter.getNoteAt(viewHolder.getAdapterPosition());
+                Note note = noteAdapter.getNoteAt(viewHolder.getAdapterPosition());
                 noteViewModel.delete(note);
                 Toast.makeText(MainActivity.this, "Note deleted", Toast.LENGTH_SHORT).show();
             }
         }
         ).attachToRecyclerView(recyclerView);
 
-        adapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener() {
+        noteAdapter.setOnItemClickListener(new NoteAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Note note) {
                 Intent intent = new Intent(MainActivity.this, AddEditNoteActivity.class);
-                intent.putExtra(AddEditNoteActivity.EXTRA_ID, note.getId());
+                intent.putExtra(AddEditNoteActivity.EXTRA_ID, note.getNoteId());
                 intent.putExtra(AddEditNoteActivity.EXTRA_TITLE, note.getTitle());
                 intent.putExtra(AddEditNoteActivity.EXTRA_DESCRIPTION, note.getDescription());
                 intent.putExtra(AddEditNoteActivity.EXTRA_PRIORITY, note.getPriority());
@@ -94,8 +95,9 @@ public class MainActivity extends AppCompatActivity {
             String title = data.getStringExtra(AddEditNoteActivity.EXTRA_TITLE);
             String description = data.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
             int priority = data.getIntExtra(AddEditNoteActivity.EXTRA_PRIORITY, 1);
+            int categoryId = data.getIntExtra(AddEditNoteActivity.EXTRA_CATID, 1);
 
-            Note note = new Note(title, description, priority);
+            Note note = new Note(title, description, priority, categoryId);
             noteViewModel.insert(note);
 
             Toast.makeText(this, "Note saved", Toast.LENGTH_SHORT).show();
@@ -109,9 +111,10 @@ public class MainActivity extends AppCompatActivity {
 
                 String description = data.getStringExtra(AddEditNoteActivity.EXTRA_DESCRIPTION);
                 int priority = data.getIntExtra(AddEditNoteActivity.EXTRA_PRIORITY, 1);
+                int categoryId = data.getIntExtra(AddEditNoteActivity.EXTRA_CATID, 1);
 
-                Note note = new Note(title, description, priority);
-                note.setId(id);
+                Note note = new Note(title, description, priority, categoryId);
+                note.setNoteId(id);
 
                 noteViewModel.update(note);
                 Toast.makeText(this, "Note updated", Toast.LENGTH_SHORT).show();

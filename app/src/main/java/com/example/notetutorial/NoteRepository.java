@@ -14,7 +14,7 @@ public class NoteRepository {
 
     public NoteRepository(Application application) {
         NoteDatabase database = NoteDatabase.getInstance(application);
-        noteDao = database.noteDao();
+        noteDao = database.getNoteDao();
         allNotes = noteDao.getAllNotes();
 
     }
@@ -24,20 +24,25 @@ public class NoteRepository {
     }
 
     public void update(Note note) {
+
         new UpdateNoteAsyncTask(noteDao).execute(note);
     }
     public void delete(Note note) {
+
         new DeleteNoteAsyncTask(noteDao).execute(note);
     }
 
     public void deleteAllNotes() {
+
         new DeleteAllNotesAsyncTask(noteDao).execute();
     }
 
     public LiveData<List<Note>> getAllNotes() {
+
         return allNotes;
     }
 
+    // static necessary, because it needs to be instantiated before the outer object is instantiated
     private static class InsertNoteAsyncTask extends AsyncTask<Note, Void, Void> {
 
         private NoteDao noteDao;

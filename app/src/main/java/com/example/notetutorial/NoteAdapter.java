@@ -21,14 +21,15 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
     private static final DiffUtil.ItemCallback<Note> DIFF_CALLBACK = new DiffUtil.ItemCallback<Note>() {
         @Override
         public boolean areItemsTheSame(@NonNull Note oldItem, @NonNull Note newItem) {
-            return oldItem.getId() == newItem.getId();
+            return oldItem.getNoteId() == newItem.getNoteId();
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull Note oldItem, @NonNull Note newItem) {
             return oldItem.getTitle().equals(newItem.getTitle())
                     && oldItem.getDescription().equals(newItem.getDescription())
-                    && (oldItem.getPriority() == newItem.getPriority());
+                    && (oldItem.getPriority() == newItem.getPriority())
+                    && (oldItem.getCategoryId() == newItem.getCategoryId());
         }
     };
 
@@ -46,6 +47,8 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
         holder.textViewTitle.setText(currentNote.getTitle());
         holder.textViewDescription.setText(currentNote.getDescription());
         holder.textViewPriority.setText(String.valueOf(currentNote.getPriority()));
+        holder.textViewCategory.setText(String.valueOf(currentNote.getCategoryId()));
+
 
     }
 
@@ -57,13 +60,14 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteHolder> {
         private TextView textViewTitle;
         private TextView textViewDescription;
         private TextView textViewPriority;
-
+        private TextView textViewCategory;
 
         public NoteHolder(@NonNull View itemView) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.text_view_title);
             textViewDescription = itemView.findViewById(R.id.text_view_description);
             textViewPriority = itemView.findViewById(R.id.text_view_priority);
+            textViewCategory = itemView.findViewById(R.id.text_view_category);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
