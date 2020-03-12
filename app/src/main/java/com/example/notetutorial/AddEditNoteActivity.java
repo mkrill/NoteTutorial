@@ -68,7 +68,7 @@ public class AddEditNoteActivity extends AppCompatActivity {
             setTitle("Add Note");
         }
 
-         CategoryViewModel categoryViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(CategoryViewModel.class);
+        CategoryViewModel categoryViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(CategoryViewModel.class);
         categoryViewModel.getAllCategories().observe(this, new Observer<List<Category>>() {
             @Override
             public void onChanged(@Nullable List<Category> categories) {
@@ -76,6 +76,10 @@ public class AddEditNoteActivity extends AppCompatActivity {
                 ArrayAdapter<Category> catAdapter = new ArrayAdapter<Category>(AddEditNoteActivity.this, android.R.layout.simple_spinner_item, categories);
                 catAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinnerCategory.setAdapter(catAdapter);
+                Intent intent = AddEditNoteActivity.this.getIntent();
+                long catId = intent.getLongExtra(AddEditNoteActivity.EXTRA_CATID, -1);
+                // set spinner to correct entry, -1 because ids in DB start with 1, entries in spinner with index 0
+                spinnerCategory.setSelection((int) catId - 1);
             }
         });
 
@@ -108,7 +112,6 @@ public class AddEditNoteActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -135,7 +138,7 @@ public class AddEditNoteActivity extends AppCompatActivity {
         int priority = numberPickerPriority.getValue();
 
         Category selectedCategory = (Category) spinnerCategory.getSelectedItem();
-        int categoryId = selectedCategory.getCategoryId();
+        long categoryId = selectedCategory.getId();
 
         if (title.trim().isEmpty() || description.trim().isEmpty()) {
             Toast.makeText(this, "Please insert a title and description", Toast.LENGTH_SHORT);
@@ -148,7 +151,8 @@ public class AddEditNoteActivity extends AppCompatActivity {
         data.putExtra(EXTRA_PRIORITY, priority);
         data.putExtra(EXTRA_CATID, categoryId);
 
-        int id = getIntent().getIntExtra(EXTRA_ID, -1);
+        Intent intent = getIntent();
+        long id = intent.getLongExtra(EXTRA_ID, -1);
         if (id != -1) {
             data.putExtra(EXTRA_ID, id);
         }

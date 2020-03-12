@@ -11,11 +11,13 @@ public class NoteRepository {
 
     private NoteDao noteDao;
     private LiveData<List<Note>> allNotes;
+    private LiveData<List<NoteWithCategory>> allNotesWithCategory;
 
     public NoteRepository(Application application) {
         NoteDatabase database = NoteDatabase.getInstance(application);
         noteDao = database.getNoteDao();
         allNotes = noteDao.getAllNotes();
+        allNotesWithCategory = noteDao.getAllNotesWithCategory();
 
     }
 
@@ -27,9 +29,15 @@ public class NoteRepository {
 
         new UpdateNoteAsyncTask(noteDao).execute(note);
     }
+
     public void delete(Note note) {
 
         new DeleteNoteAsyncTask(noteDao).execute(note);
+    }
+
+    public void deleteNoteWithId(long id) {
+
+        new DeleteNoteWithIdAsyncTask(noteDao).execute(id);
     }
 
     public void deleteAllNotes() {
@@ -40,6 +48,10 @@ public class NoteRepository {
     public LiveData<List<Note>> getAllNotes() {
 
         return allNotes;
+    }
+
+    public LiveData<List<NoteWithCategory>> getAllNotesWithCategory() {
+        return allNotesWithCategory;
     }
 
     // static necessary, because it needs to be instantiated before the outer object is instantiated
@@ -84,6 +96,21 @@ public class NoteRepository {
         @Override
         protected Void doInBackground(Note... notes) {
             noteDao.delete(notes[0]);
+            return null;
+        }
+    }
+
+    private static class DeleteNoteWithIdAsyncTask extends AsyncTask<Long, Void, Void> {
+
+        private NoteDao noteDao;
+
+        private DeleteNoteWithIdAsyncTask(NoteDao noteDao) {
+            this.noteDao = noteDao;
+        }
+
+        @Override
+        protected Void doInBackground(Long... ids) {
+            noteDao.deleteNoteWithId(ids[0]);
             return null;
         }
     }

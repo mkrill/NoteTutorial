@@ -1,6 +1,7 @@
 package com.example.notetutorial;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -13,7 +14,8 @@ public class Category {
 
     @Setter
     @PrimaryKey(autoGenerate=true)
-    private int categoryId;
+    @ColumnInfo(name = "category_id")
+    private long id;
 
     private String name;
 
