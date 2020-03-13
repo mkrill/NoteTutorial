@@ -68,18 +68,25 @@ public class AddEditNoteActivity extends AppCompatActivity {
             setTitle("Add Note");
         }
 
-        CategoryViewModel categoryViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(CategoryViewModel.class);
+        final CategoryViewModel categoryViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(CategoryViewModel.class);
         categoryViewModel.getAllCategories().observe(this, new Observer<List<Category>>() {
             @Override
             public void onChanged(@Nullable List<Category> categories) {
-                // update spinner after livedata changed
+
                 ArrayAdapter<Category> catAdapter = new ArrayAdapter<Category>(AddEditNoteActivity.this, android.R.layout.simple_spinner_item, categories);
                 catAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinnerCategory.setAdapter(catAdapter);
+
+                // read category id from intent
                 Intent intent = AddEditNoteActivity.this.getIntent();
                 long catId = intent.getLongExtra(AddEditNoteActivity.EXTRA_CATID, -1);
-                // set spinner to correct entry, -1 because ids in DB start with 1, entries in spinner with index 0
-                spinnerCategory.setSelection((int) catId - 1);
+
+                // read complete from database
+                Category catFromDB = categoryViewModel.findCategoryById(catId);
+
+                // identify position of category in spinner and set selected value to the corresponding position
+                int positionOfNoteCategoryInSpinner = catAdapter.getPosition(catFromDB);
+                spinnerCategory.setSelection(positionOfNoteCategoryInSpinner);
             }
         });
 

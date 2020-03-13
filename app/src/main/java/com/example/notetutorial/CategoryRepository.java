@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class CategoryRepository {
 
@@ -32,6 +33,17 @@ public class CategoryRepository {
     public void delete(Category category) {
 
         new DeleteCategoryAsyncTask(categoryDao).execute(category);
+    }
+
+    public Category findCategoryById(long id) {
+        try {
+            return new FindCategoryByIdAsyncTask(categoryDao).execute(id).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void deleteAllCategories() {
@@ -93,6 +105,27 @@ public class CategoryRepository {
             categoryDao.delete(categories[0]);
             return null;
         }
+    }
+
+    private static class FindCategoryByIdAsyncTask extends AsyncTask<Long, Void, Category> {
+
+        private CategoryDao categoryDao;
+
+        private FindCategoryByIdAsyncTask(CategoryDao categoryDao) {
+            this.categoryDao = categoryDao;
+        }
+
+        @Override
+        protected Category doInBackground(Long... ids) {
+            return categoryDao.findCategoryById(ids[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Category category) {
+            super.onPostExecute(category);
+        }
+
+
     }
 
     private static class DeleteAllCategoriesAsyncTask extends AsyncTask<Void, Void, Void> {

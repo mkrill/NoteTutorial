@@ -30,7 +30,7 @@ public interface NoteDao {
     @Query("SELECT * FROM note_table ORDER BY priority DESC")
     LiveData<List<Note>> getAllNotes();
 
-    @Query("Select n.*, c.category_id as c_category_id, c.name as c_name from note_table n LEFT JOIN category_table c ON n.fk_category_id = c.category_id")
+    @Query("Select n.*, c.category_id as c_category_id, c.name as c_name from note_table n LEFT JOIN category_table c ON n.fk_category_id = c.category_id ORDER BY priority DESC")
     LiveData<List<NoteWithCategory>> getAllNotesWithCategory();
 
 }

@@ -22,14 +22,17 @@ public interface CategoryDao {
     @Delete
     void delete(Category category);
 
+    @Query("SELECT * FROM category_table WHERE category_id = :id")
+    Category findCategoryById(long id);
+
     @Query("DELETE FROM category_table")
     void deleteAllCategories();
 
-    @Query("SELECT * FROM category_table")
+    @Query("SELECT * FROM category_table ORDER BY name ASC")
     LiveData<List<Category>> getAllCategories();
 
     @Transaction
-    @Query("SELECT * FROM category_table")
+    @Query("SELECT * FROM category_table ORDER BY name ASC")
     LiveData<List<CategoryWithNotes>> getCategoryWithNotes();
 
 }

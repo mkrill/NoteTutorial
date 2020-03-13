@@ -28,6 +28,10 @@ public class CategoryViewModel extends AndroidViewModel {
         repository.update(category);
     }
 
+    public Category findCategoryById(long id) {
+        return repository.findCategoryById(id);
+    }
+
     public void delete(Category category) {
 
         repository.delete(category);
