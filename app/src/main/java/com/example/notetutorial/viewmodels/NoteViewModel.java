@@ -1,10 +1,14 @@
-package com.example.notetutorial;
+package com.example.notetutorial.viewmodels;
 
 import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+
+import com.example.notetutorial.data.Note;
+import com.example.notetutorial.data.NoteRepository;
+import com.example.notetutorial.data.NoteWithCategory;
 
 import java.util.List;
 

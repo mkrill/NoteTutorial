@@ -1,4 +1,4 @@
-package com.example.notetutorial;
+package com.example.notetutorial.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +17,11 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.notetutorial.viewmodels.NoteViewModel;
+import com.example.notetutorial.R;
+import com.example.notetutorial.adapters.NoteWithCategoryAdapter;
+import com.example.notetutorial.data.Note;
+import com.example.notetutorial.data.NoteWithCategory;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;

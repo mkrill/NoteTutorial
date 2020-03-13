@@ -1,4 +1,4 @@
-package com.example.notetutorial;
+package com.example.notetutorial.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +19,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.example.notetutorial.viewmodels.CategoryViewModel;
+import com.example.notetutorial.R;
+import com.example.notetutorial.data.Category;
 
 import java.util.List;
 

@@ -1,7 +1,10 @@
-package com.example.notetutorial;
+package com.example.notetutorial.data;
 
 import androidx.room.Embedded;
 import androidx.room.Relation;
+
+import com.example.notetutorial.data.Category;
+import com.example.notetutorial.data.Note;
 
 import java.util.List;
 

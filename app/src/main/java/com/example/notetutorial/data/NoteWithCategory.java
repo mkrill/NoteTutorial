@@ -1,12 +1,12 @@
-package com.example.notetutorial;
+package com.example.notetutorial.data;
 
 import androidx.room.Embedded;
 
 public class NoteWithCategory {
 
     @Embedded
-    Note node;
+    public Note node;
 
     @Embedded(prefix = "c_")
-    Category category;
+    public Category category;
 }
